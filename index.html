@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Art - Amusement Park</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    #scene-container {
+      position: relative;
+      width: 4000px;
+      height: 100vh;
+      background: url('background.png') no-repeat;
+      background-size: cover;
+    }
+    .interact {
+      position: absolute;
+      cursor: pointer;
+    }
+    .door {
+      transition: opacity 0.3s;
+    }
+    #girl-idle, #girl-turn, #girl-walk {
+      position: absolute;
+      bottom: 50px;
+      left: 100px;
+      height: 200px;
+      display: none;
+      pointer-events: none;
+    }
+    #girl-idle { display: block; }
+  </style>
+</head>
+<body>
+  <div id="scene-container">
+    <!-- Girl animations -->
+    <img id="girl-idle" src="girl_idle.gif" />
+    <img id="girl-turn" src="girl_turn.gif" />
+    <img id="girl-walk" src="girl_walk.gif" />
+
+    <!-- Interactables -->
+    <img class="interact" id="carousel" src="carousel.gif" style="top: 300px; left: 300px;" />
+    <img class="interact" id="ferris" src="ferris.gif" style="top: 280px; left: 1200px;" />
+    <img class="interact" id="musicians" src="musicians.gif" style="top: 290px; left: 2100px;" />
+
+    <!-- Doors -->
+    <img class="interact door" id="door1" src="door1.png" style="top: 270px; left: 3100px;" />
+    <img class="interact door" id="door2" src="door2.png" style="top: 270px; left: 3200px;" />
+    <img class="interact door" id="door3" src="door3.png" style="top: 270px; left: 3300px;" />
+    <img class="interact door" id="door4" src="door4.png" style="top: 270px; left: 3400px;" />
+  </div>
+
+  <script>
+    const girlIdle = document.getElementById("girl-idle");
+    const girlTurn = document.getElementById("girl-turn");
+    const girlWalk = document.getElementById("girl-walk");
+
+    let girlX = 100;
+
+    function showGIF(state) {
+      girlIdle.style.display = state === "idle" ? "block" : "none";
+      girlTurn.style.display = state === "turn" ? "block" : "none";
+      girlWalk.style.display = state === "walk" ? "block" : "none";
+    }
+
+    function moveGirlTo(targetX, onArrival) {
+      showGIF("turn");
+      setTimeout(() => {
+        showGIF("walk");
+        const interval = setInterval(() => {
+          if (girlX < targetX) {
+            girlX += 5;
+            girlIdle.style.left = girlTurn.style.left = girlWalk.style.left = girlX + "px";
+          } else {
+            clearInterval(interval);
+            showGIF("idle");
+            if (onArrival) onArrival();
+          }
+        }, 20);
+      }, 1000);
+    }
+
+    document.querySelectorAll('.interact').forEach(elem => {
+      if (elem.classList.contains("door")) {
+        elem.addEventListener("click", () => {
+          elem.style.display = elem.style.display === "none" ? "block" : "none";
+        });
+      } else {
+        elem.addEventListener("click", () => {
+          const targetX = parseInt(elem.style.left);
+          moveGirlTo(targetX - 50); // Move girl slightly before the object
+        });
+      }
+    });
+  </script>
+</body>
+</html>
