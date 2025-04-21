@@ -7,7 +7,8 @@
   <style>
     body {
       margin: 0;
-      overflow: hidden;
+      overflow-x: scroll;
+      overflow-y: hidden;
     }
     #scene-container {
       position: relative;
@@ -26,7 +27,7 @@
     #girl-idle, #girl-turn, #girl-walk {
       position: absolute;
       bottom: 50px;
-      left: 100px;
+      left: 0px;
       height: 200px;
       display: none;
       pointer-events: none;
@@ -41,10 +42,17 @@
     <img id="girl-turn" src="girl_turn.gif" />
     <img id="girl-walk" src="girl_walk.gif" />
 
-    <!-- Interactables -->
-    <img class="interact" id="carousel" src="carousel.gif" style="top: 300px; left: 300px;" />
-    <img class="interact" id="ferris" src="ferris.gif" style="top: 280px; left: 1200px;" />
-    <img class="interact" id="musicians" src="musicians.gif" style="top: 290px; left: 2100px;" />
+    <!-- Carousel -->
+    <img class="interact" id="carousel-static" src="carousel_static.png" style="top: 300px; left: 300px;" />
+    <img class="interact" id="carousel-anim" src="carousel.gif" style="top: 300px; left: 300px; display: none;" />
+
+    <!-- Ferris Wheel -->
+    <img class="interact" id="ferris-static" src="ferris_static.png" style="top: 280px; left: 1200px;" />
+    <img class="interact" id="ferris-anim" src="ferris.gif" style="top: 280px; left: 1200px; display: none;" />
+
+    <!-- Musicians -->
+    <img class="interact" id="musicians-static" src="musicians_static.png" style="top: 290px; left: 2100px;" />
+    <img class="interact" id="musicians-anim" src="musicians.gif" style="top: 290px; left: 2100px; display: none;" />
 
     <!-- Doors -->
     <img class="interact door" id="door1" src="door1.png" style="top: 270px; left: 3100px;" />
@@ -57,8 +65,7 @@
     const girlIdle = document.getElementById("girl-idle");
     const girlTurn = document.getElementById("girl-turn");
     const girlWalk = document.getElementById("girl-walk");
-
-    let girlX = 100;
+    let girlX = 0;
 
     function showGIF(state) {
       girlIdle.style.display = state === "idle" ? "block" : "none";
@@ -83,17 +90,37 @@
       }, 1000);
     }
 
-    document.querySelectorAll('.interact').forEach(elem => {
-      if (elem.classList.contains("door")) {
-        elem.addEventListener("click", () => {
-          elem.style.display = elem.style.display === "none" ? "block" : "none";
-        });
-      } else {
-        elem.addEventListener("click", () => {
-          const targetX = parseInt(elem.style.left);
-          moveGirlTo(targetX - 50); // Move girl slightly before the object
-        });
-      }
+    function handleInteraction(staticId, animId, targetX) {
+      moveGirlTo(targetX - 50, () => {
+        const staticEl = document.getElementById(staticId);
+        const animEl = document.getElementById(animId);
+
+        staticEl.style.display = "none";
+        animEl.style.display = "block";
+
+        setTimeout(() => {
+          animEl.style.display = "none";
+          staticEl.style.display = "block";
+        }, 10000);
+      });
+    }
+
+    document.getElementById("carousel-static").addEventListener("click", () => {
+      handleInteraction("carousel-static", "carousel-anim", 300);
+    });
+
+    document.getElementById("ferris-static").addEventListener("click", () => {
+      handleInteraction("ferris-static", "ferris-anim", 1200);
+    });
+
+    document.getElementById("musicians-static").addEventListener("click", () => {
+      handleInteraction("musicians-static", "musicians-anim", 2100);
+    });
+
+    document.querySelectorAll('.door').forEach(door => {
+      door.addEventListener("click", () => {
+        door.style.display = door.style.display === "none" ? "block" : "none";
+      });
     });
   </script>
 </body>
