@@ -104,7 +104,11 @@ const girlTurnLeft = document.getElementById("girl-turn-left");
 
   setTimeout(() => {
     // walk animation
-    showGIF(direction === 'right' ? "walk-right" : "walk-left");
+    if (direction === 'right') {
+      showGIF("walk-right");
+    } else {
+      showGIF("walk-left");
+    }
     const interval = setInterval(() => {
       if ((direction === 'right' && girlX < targetX) || (direction === 'left' && girlX > targetX)) {
         girlX += direction === 'right' ? 5 : -5;
