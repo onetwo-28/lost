@@ -39,8 +39,8 @@
     }
     #girl-idle, #girl-turn, #girl-walk {
       position: absolute;
-      bottom: 50px;
-      left: 0px;
+      top: 620px;
+      left: -100px;
       height: 200px;
       display: none;
       pointer-events: none;
@@ -78,7 +78,7 @@
     const girlIdle = document.getElementById("girl-idle");
     const girlTurn = document.getElementById("girl-turn");
     const girlWalk = document.getElementById("girl-walk");
-    let girlX = 0;
+    let girlX = -100;
 
     function showGIF(state) {
       girlIdle.style.display = state === "idle" ? "block" : "none";
@@ -135,6 +135,12 @@
         door.style.display = door.style.display === "none" ? "block" : "none";
       });
     });
-  </script>
+  document.getElementById("scene-container").addEventListener("click", (e) => {
+  const containerRect = document.getElementById("scene-container").getBoundingClientRect();
+  const targetX = e.clientX + window.scrollX - 100;
+  moveGirlTo(targetX);
+});
+
+</script>
 </body>
 </html>
