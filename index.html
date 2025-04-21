@@ -98,15 +98,13 @@ const girlTurnLeft = document.getElementById("girl-turn-left");
 
     function moveGirlTo(targetX, onArrival) {
   const direction = girlX < targetX ? 'right' : 'left';
+
+  // turn animation
   showGIF(direction === 'right' ? "turn" : "turn-left");
+
   setTimeout(() => {
-    if (direction === 'right') {
-      showGIF("turn");
-      setTimeout(() => showGIF("walk-right"), 500);
-    } else {
-      showGIF("turn-left");
-      setTimeout(() => showGIF("walk-left"), 500);
-    }
+    // walk animation
+    showGIF(direction === 'right' ? "walk-right" : "walk-left");
     const interval = setInterval(() => {
       if ((direction === 'right' && girlX < targetX) || (direction === 'left' && girlX > targetX)) {
         girlX += direction === 'right' ? 5 : -5;
