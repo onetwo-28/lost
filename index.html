@@ -37,14 +37,16 @@
       transform: scale(0.5);
       transform-origin: top left;
     }
-    #girl-idle, #girl-turn, #girl-walk {
-      position: absolute;
-      top: 690px;
-      left: -50px;
-      height: 200px;
-      display: none;
-      pointer-events: none;
-    }
+    #girl-idle, #girl-idle-left,
+#girl-turn, #girl-turn-left,
+#girl-walk, #girl-walk-left {
+  position: absolute;
+  top: 690px;
+  left: -50px;
+  height: 200px;
+  display: none;
+  pointer-events: none;
+}
     #girl-idle { display: block; }
   </style>
 </head>
@@ -110,11 +112,7 @@ const girlTurnLeft = document.getElementById("girl-turn-left");
       }
     }, 20);
   }, 1000);
-} else {
-            clearInterval(interval);
-            showGIF("idle");
-            if (onArrival) onArrival();
-          }
+} 
         }, 20);
       }, 1000);
     }
@@ -157,6 +155,9 @@ const girlTurnLeft = document.getElementById("girl-turn-left");
   moveGirlTo(targetX);
 });
 
+window.addEventListener("load", () => {
+  showGIF("idle");
+});
 </script>
 </body>
 </html>
