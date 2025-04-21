@@ -100,14 +100,22 @@ const girlTurnLeft = document.getElementById("girl-turn-left");
   const direction = girlX < targetX ? 'right' : 'left';
   showGIF(direction === 'right' ? "turn" : "turn-left");
   setTimeout(() => {
-    showGIF(direction === 'right' ? "walk-right" : "walk-left");
+    if (direction === 'right') {
+      showGIF("turn");
+      setTimeout(() => showGIF("walk-right"), 500);
+    } else {
+      showGIF("turn-left");
+      setTimeout(() => showGIF("walk-left"), 500);
+    }
     const interval = setInterval(() => {
       if ((direction === 'right' && girlX < targetX) || (direction === 'left' && girlX > targetX)) {
         girlX += direction === 'right' ? 5 : -5;
         girlIdle.style.left = girlIdleLeft.style.left = girlTurn.style.left = girlTurnLeft.style.left = girlWalk.style.left = girlWalkLeft.style.left = girlX + "px";
       } else {
         clearInterval(interval);
-        showGIF(direction === 'right' ? "idle" : "idle-left");
+        setTimeout(() => {
+          showGIF(direction === 'right' ? "idle" : "idle-left");
+        }, 500);
         if (onArrival) onArrival();
                 }
         }, 20);
