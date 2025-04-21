@@ -147,9 +147,10 @@ const girlTurnLeft = document.getElementById("girl-turn-left");
       });
     });
   document.getElementById("scene-container").addEventListener("click", (e) => {
-  const containerRect = document.getElementById("scene-container").getBoundingClientRect();
-  const targetX = e.clientX + window.scrollX - 100;
-  moveGirlTo(targetX);
+  if (e.target.id === "scene-container") {
+    const targetX = e.clientX + window.scrollX - 100;
+    moveGirlTo(targetX);
+  }
 });
 
 window.addEventListener("load", () => {
