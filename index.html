@@ -23,6 +23,17 @@
     }
     .door {
       transition: opacity 0.3s;
+      transform: scale(0.4);
+      transform-origin: top left;
+    }
+    #carousel-static,
+    #carousel-anim,
+    #ferris-static,
+    #ferris-anim,
+    #musicians-static,
+    #musicians-anim {
+      transform: scale(0.5);
+      transform-origin: top left;
     }
     #girl-idle, #girl-turn, #girl-walk {
       position: absolute;
@@ -43,22 +54,22 @@
     <img id="girl-walk" src="girl_walk.gif" />
 
     <!-- Carousel -->
-    <img class="interact" id="carousel-static" src="carousel_static.png" style="top: 300px; left: 300px;" />
-    <img class="interact" id="carousel-anim" src="carousel.gif" style="top: 300px; left: 300px; display: none;" />
+    <img class="interact" id="carousel-static" src="carousel_static.png" style="top: 200px; left: 300px;" />
+    <img class="interact" id="carousel-anim" src="carousel.gif" style="top: 200px; left: 300px; display: none;" />
 
     <!-- Ferris Wheel -->
-    <img class="interact" id="ferris-static" src="ferris_static.png" style="top: 280px; left: 1200px;" />
-    <img class="interact" id="ferris-anim" src="ferris.gif" style="top: 280px; left: 1200px; display: none;" />
+    <img class="interact" id="ferris-static" src="ferris_static.png" style="top: 180px; left: 1200px;" />
+    <img class="interact" id="ferris-anim" src="ferris.gif" style="top: 180px; left: 1200px; display: none;" />
 
     <!-- Musicians -->
-    <img class="interact" id="musicians-static" src="musicians_static.png" style="top: 290px; left: 2100px;" />
-    <img class="interact" id="musicians-anim" src="musicians.gif" style="top: 290px; left: 2100px; display: none;" />
+    <img class="interact" id="musicians-static" src="musicians_static.png" style="top: 200px; left: 2100px;" />
+    <img class="interact" id="musicians-anim" src="musicians.gif" style="top: 200px; left: 2100px; display: none;" />
 
     <!-- Doors -->
-    <img class="interact door" id="door1" src="door1.png" style="top: 270px; left: 3100px;" />
-    <img class="interact door" id="door2" src="door2.png" style="top: 270px; left: 3200px;" />
-    <img class="interact door" id="door3" src="door3.png" style="top: 270px; left: 3300px;" />
-    <img class="interact door" id="door4" src="door4.png" style="top: 270px; left: 3400px;" />
+    <img class="interact door" id="door1" src="door1.png" style="top: 170px; left: 3100px;" />
+    <img class="interact door" id="door2" src="door2.png" style="top: 170px; left: 3200px;" />
+    <img class="interact door" id="door3" src="door3.png" style="top: 170px; left: 3300px;" />
+    <img class="interact door" id="door4" src="door4.png" style="top: 170px; left: 3400px;" />
   </div>
 
   <script>
@@ -125,3 +136,4 @@
   </script>
 </body>
 </html>
+
