@@ -1,97 +1,185 @@
-<script>
-  const girlIdle = document.getElementById("girl-idle");
-  const girlIdleLeft = document.getElementById("girl-idle-left");
-  const girlWalkLeft = document.getElementById("girl-walk-left");
-  const girlTurnLeft = document.getElementById("girl-turn-left");
-  const girlTurn = document.getElementById("girl-turn");
-  const girlWalk = document.getElementById("girl-walk");
-  let girlX = -50;
-
-  function showGIF(state) {
-    girlIdle.style.display = state === "idle" ? "block" : "none";
-    girlIdleLeft.style.display = state === "idle-left" ? "block" : "none";
-    girlTurn.style.display = state === "turn" ? "block" : "none";
-    girlTurnLeft.style.display = state === "turn-left" ? "block" : "none";
-    girlWalk.style.display = state === "walk-right" ? "block" : "none";
-    girlWalkLeft.style.display = state === "walk-left" ? "block" : "none";
-  }
-
-  function moveGirlTo(targetX, onArrival) {
-    const direction = girlX < targetX ? 'right' : 'left';
-    showGIF(direction === 'right' ? "turn" : "turn-left");
-
-    setTimeout(() => {
-      showGIF(direction === 'right' ? "walk-right" : "walk-left");
-      const interval = setInterval(() => {
-        if ((direction === 'right' && girlX < targetX) || (direction === 'left' && girlX > targetX)) {
-          girlX += direction === 'right' ? 5 : -5;
-          const newX = girlX + "px";
-          girlIdle.style.left = girlIdleLeft.style.left = girlTurn.style.left =
-          girlTurnLeft.style.left = girlWalk.style.left = girlWalkLeft.style.left = newX;
-        } else {
-          clearInterval(interval);
-          setTimeout(() => {
-            showGIF(direction === 'right' ? "idle" : "idle-left");
-          }, 500);
-          if (onArrival) onArrival();
-        }
-      }, 20);
-    }, 1000);
-  }
-
-  function handleInteraction(staticId, animId, targetX) {
-    moveGirlTo(targetX - 50, () => {
-      const staticEl = document.getElementById(staticId);
-      const animEl = document.getElementById(animId);
-      staticEl.style.display = "none";
-      animEl.style.display = "block";
-      setTimeout(() => {
-        animEl.style.display = "none";
-        staticEl.style.display = "block";
-      }, 10000);
-    });
-  }
-
-  // 회전목마, 대관람차, 연주자
-  document.getElementById("carousel-static").addEventListener("click", () => {
-    handleInteraction("carousel-static", "carousel-anim", 300);
-  });
-
-  document.getElementById("ferris-static").addEventListener("click", () => {
-    handleInteraction("ferris-static", "ferris-anim", 1200);
-  });
-
-  document.getElementById("musicians-static").addEventListener("click", () => {
-    handleInteraction("musicians-static", "musicians-anim", 2100);
-  });
-
-  // 문 1~3: 클릭하면 사라졌다가 5초 뒤에 복귀
-  ["door1", "door2", "door3"].forEach(id => {
-    const door = document.getElementById(id);
-    door.addEventListener("click", () => {
-      door.style.display = "none";
-      setTimeout(() => {
-        door.style.display = "block";
-      }, 5000);
-    });
-  });
-
-  // 문 4: 토글 열림/닫힘
-  document.getElementById("door4").addEventListener("click", () => {
-    const door = document.getElementById("door4");
-    door.style.display = door.style.display === "none" ? "block" : "none";
-  });
-
-  // 여자아이 클릭 이동
-  document.getElementById("scene-container").addEventListener("click", (e) => {
-    if (e.target.id === "scene-container") {
-      const targetX = e.clientX + window.scrollX - 100;
-      moveGirlTo(targetX);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Art - Amusement Park</title>
+  <style>
+    body {
+      margin: 0;
+      overflow-x: auto;
+      overflow-y: auto;
     }
-  });
 
-  // 시작 시 기본 자세로 설정
-  window.addEventListener("load", () => {
-    showGIF("idle");
-  });
-</script>
+    #scene-container {
+      background-image: url("background.png");
+      width: 5020px;
+      height: 100vh;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: top left;
+      position: relative;
+    }
+
+    .interact {
+      position: absolute;
+      cursor: pointer;
+    }
+
+    .door {
+      transition: opacity 0.3s;
+      transform: scale(0.12);
+      transform-origin: top left;
+    }
+
+    #carousel-static,
+    #carousel-anim,
+    #ferris-static,
+    #ferris-anim,
+    #musicians-static,
+    #musicians-anim {
+      transform-origin: top left;
+    }
+
+    #girl-idle, #girl-idle-left,
+    #girl-turn, #girl-turn-left,
+    #girl-walk, #girl-walk-left {
+      position: absolute;
+      top: 740px;
+      left: -50px;
+      height: 200px;
+      display: none;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    #girl-idle { display: block; }
+  </style>
+</head>
+<body>
+  <div id="scene-container">
+    <!-- Girl -->
+    <img id="girl-idle" src="girl_idle.gif" />
+    <img id="girl-idle-left" src="girl_idle_left.gif" />
+    <img id="girl-turn" src="girl_turn.gif" />
+    <img id="girl-walk" src="girl_walk.gif" />
+    <img id="girl-turn-left" src="girl_turn_left.gif" />
+    <img id="girl-walk-left" src="girl_walk_left.gif" />
+
+    <!-- Carousel -->
+    <img class="interact" id="carousel-static" src="carousel_static.png" style="top: 360px; left: 380px; transform: scale(0.5);" />
+    <img class="interact" id="carousel-anim" src="carousel.gif" style="top: 340px; left: 352px; display: none; transform: scale(0.55);" />
+
+    <!-- Ferris Wheel -->
+    <img class="interact" id="ferris-static" src="ferris_static.png" style="top: 180px; left: 1200px; transform: scale(0.55);" />
+    <img class="interact" id="ferris-anim" src="ferris.gif" style="top: 180px; left: 1200px; display: none; transform: scale(0.5);" />
+
+    <!-- Musicians -->
+    <img class="interact" id="musicians-static" src="musicians_static.png" style="top: 450px; left: 3000px;" />
+    <img class="interact" id="musicians-anim" src="musicians.gif" style="top: 450px; left: 3000px; display: none; transform: scale(0.22);" />
+
+    <!-- Doors -->
+    <img class="interact door" id="door1" src="door1.png" style="top: 660px; left: 3889px;" />
+    <img class="interact door" id="door2" src="door2.png" style="top: 670px; left: 4200px;" />
+    <img class="interact door" id="door3" src="door3.png" style="top: 670px; left: 4450px;" />
+    <img class="interact door" id="door4" src="door4.png" style="top: 670px; left: 4700px;" />
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const girlIdle = document.getElementById("girl-idle");
+      const girlIdleLeft = document.getElementById("girl-idle-left");
+      const girlTurn = document.getElementById("girl-turn");
+      const girlTurnLeft = document.getElementById("girl-turn-left");
+      const girlWalk = document.getElementById("girl-walk");
+      const girlWalkLeft = document.getElementById("girl-walk-left");
+
+      let girlX = -50;
+
+      function showGIF(state) {
+        girlIdle.style.display = state === "idle" ? "block" : "none";
+        girlIdleLeft.style.display = state === "idle-left" ? "block" : "none";
+        girlTurn.style.display = state === "turn" ? "block" : "none";
+        girlTurnLeft.style.display = state === "turn-left" ? "block" : "none";
+        girlWalk.style.display = state === "walk-right" ? "block" : "none";
+        girlWalkLeft.style.display = state === "walk-left" ? "block" : "none";
+      }
+
+      function moveGirlTo(targetX, onArrival) {
+        const direction = girlX < targetX ? 'right' : 'left';
+        showGIF(direction === 'right' ? "turn" : "turn-left");
+
+        setTimeout(() => {
+          showGIF(direction === 'right' ? "walk-right" : "walk-left");
+          const interval = setInterval(() => {
+            if ((direction === 'right' && girlX < targetX) || (direction === 'left' && girlX > targetX)) {
+              girlX += direction === 'right' ? 5 : -5;
+              const newX = girlX + "px";
+              girlIdle.style.left = girlIdleLeft.style.left = girlTurn.style.left =
+              girlTurnLeft.style.left = girlWalk.style.left = girlWalkLeft.style.left = newX;
+            } else {
+              clearInterval(interval);
+              setTimeout(() => {
+                showGIF(direction === 'right' ? "idle" : "idle-left");
+              }, 500);
+              if (onArrival) onArrival();
+            }
+          }, 20);
+        }, 1000);
+      }
+
+      function handleInteraction(staticId, animId, targetX) {
+        moveGirlTo(targetX - 50, () => {
+          const staticEl = document.getElementById(staticId);
+          const animEl = document.getElementById(animId);
+          staticEl.style.display = "none";
+          animEl.style.display = "block";
+          setTimeout(() => {
+            animEl.style.display = "none";
+            staticEl.style.display = "block";
+          }, 10000);
+        });
+      }
+
+      document.getElementById("carousel-static").addEventListener("click", () => {
+        handleInteraction("carousel-static", "carousel-anim", 300);
+      });
+
+      document.getElementById("ferris-static").addEventListener("click", () => {
+        handleInteraction("ferris-static", "ferris-anim", 1200);
+      });
+
+      document.getElementById("musicians-static").addEventListener("click", () => {
+        handleInteraction("musicians-static", "musicians-anim", 2100);
+      });
+
+      // Door 1~3: hide for 5 sec
+      ["door1", "door2", "door3"].forEach(id => {
+        const door = document.getElementById(id);
+        door.addEventListener("click", () => {
+          door.style.display = "none";
+          setTimeout(() => {
+            door.style.display = "block";
+          }, 5000);
+        });
+      });
+
+      // Door 4: toggle
+      document.getElementById("door4").addEventListener("click", () => {
+        const door = document.getElementById("door4");
+        door.style.display = door.style.display === "none" ? "block" : "none";
+      });
+
+      // Move girl when background is clicked
+      document.getElementById("scene-container").addEventListener("click", (e) => {
+        if (e.target.id === "scene-container") {
+          const targetX = e.clientX + window.scrollX - 100;
+          moveGirlTo(targetX);
+        }
+      });
+
+      showGIF("idle");
+    });
+  </script>
+</body>
+</html>
