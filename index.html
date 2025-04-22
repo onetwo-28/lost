@@ -194,6 +194,16 @@ document.getElementById("door4").addEventListener("click", () => {
 window.addEventListener("load", () => {
   showGIF("idle");
 });
+document.getElementById("scene-container").addEventListener("click", (e) => {
+  if (e.target.id === "scene-container") {
+    const targetX = e.clientX + window.scrollX - 100;
+    moveGirlTo(targetX);
+  }
+});
+
+window.addEventListener("load", () => {
+  showGIF("idle");
+});
 </script>
 </body>
 </html>
